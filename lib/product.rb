@@ -5,7 +5,8 @@ class Product
 	@@products = []
 
 	def initialize(options={})
-		@title = options[:title]
+	    @title = options[:title]
+	    # Test if a product already exist
 		begin 
 			add_to_products
 	    rescue StandardError => e
@@ -18,10 +19,7 @@ class Product
 
 
 	def add_to_products
-		if Product.find_by_title(@title)
-		  raise DuplicateProductError, "'#{@title}' already exists."
-		  return
-		end
+		raise DuplicateProductError, "'#{@title}' already exists." if Product.find_by_title(@title)
 		@@products << self
 	end
 
@@ -51,6 +49,7 @@ class Product
 	# Return an array of all products with a stock greater than zero
 	def self.in_stock
 		in_stock = []
+		# XXX need refactoring
 		@@products.each do |product|
 			next if product.stock == 0
 			in_stock << product 
